@@ -1,7 +1,7 @@
-export default function Header() {
+export default function Footer() {
   return (
-    <header className="p-4 bg-black text-white flex justify-between">
-      <h1 className="font-bold">WDD430 Portfolio</h1>
-    </header>
+    <footer className="bg-black text-white text-center p-6 mt-10">
+      <p>© 2026 Dany Jimenez | WDD430 Portfolio</p>
+    </footer>
   );
 }
