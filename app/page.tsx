@@ -6,14 +6,14 @@ const projects = [
     description:
       "A personal portfolio website built with Next.js and TypeScript to showcase my software development projects.",
     technologies: ["Next.js", "TypeScript", "Tailwind CSS"],
-    link: "https://github.com/TU_USUARIO/wdd430-portfolio",
+    link: "https://github.com/dany-datcom/wdd430-portfolio",
   },
   {
     title: "Parking Management QA Project",
     description:
       "A project where I performed manual testing, API testing, and UI validation for a parking management system.",
     technologies: ["Postman", "Jira", "Testiny", "Mailtrap"],
-    link: "https://github.com/TU_USUARIO",
+    link: "https://github.com/dany-datcom/wdd430-portfolio",
   },
 ];
 

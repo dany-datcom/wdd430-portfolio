@@ -1,17 +1,16 @@
 import ProjectCard from "./ProjectCard";
-
-type Project = {
+interface Project {
   title: string;
   description: string;
   technologies: string[];
   link: string;
 };
 
-type Props = {
+interface ProjectListProps {
   projects: Project[];
 };
 
-export default function ProjectList({ projects }: Props) {
+export default function ProjectList({ projects }: ProjectListProps) {
   return (
     <div className="grid gap-6 md:grid-cols-2">
       {projects.map((project) => (

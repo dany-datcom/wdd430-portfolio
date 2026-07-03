@@ -1,9 +1,9 @@
-type ProjectCardProps = {
+interface ProjectCardProps {
   title: string;
   description: string;
   technologies: string[];
-  link: string;
-};
+  link?: string;
+}
 
 export default function ProjectCard({
   title,
@@ -26,13 +26,16 @@ export default function ProjectCard({
         </ul>
       </div>
 
-      <a
-        href={link}
-        target="_blank"
-        className="text-blue-600 hover:underline"
-      >
-        View Project
-      </a>
+      {link && (
+        <a
+          href={link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 hover:underline"
+        >
+          View Project
+        </a>
+      )}
     </div>
   );
 }
