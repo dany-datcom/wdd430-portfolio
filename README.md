@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# WDD430 Portfolio
 
-## Getting Started
+This project is a personal portfolio built with **Next.js**, **TypeScript**, and **Tailwind CSS** as part of the WDD430 course at BYU-Pathway Worldwide.
 
-First, run the development server:
+## Live Application
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+https://wdd430-portfolio-xi.vercel.app
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## GitHub Repository
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+https://github.com/dany-datcom/wdd430-portfolio
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Features
 
-## Learn More
+- Portfolio home page
+- About page
+- Reusable Server Components
+- Project cards
+- Responsive design
+- Simple Next.js API endpoint
+- Built with the App Router
 
-To learn more about Next.js, take a look at the following resources:
+## Technologies Used
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## API Endpoint
 
-## Deploy on Vercel
+The application includes a simple API route available at:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+https://wdd430-portfolio-xi.vercel.app/api/hello
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Author
+
+**Dany Jimenez**
+
+Software Development Student at BYU-Pathway Worldwide
+
+QA Engineer | IT Support | Aspiring Full-Stack Developer
