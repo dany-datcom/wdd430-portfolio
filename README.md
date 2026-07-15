@@ -39,4 +39,8 @@ https://wdd430-portfolio-xi.vercel.app/api/hello
 
 Software Development Student at BYU-Pathway Worldwide
 
+<<<<<<< HEAD
 QA Engineer | IT Support | Aspiring Full-Stack Developer
+=======
+QA Engineer | IT Support | Aspiring Full-Stack Developer
+>>>>>>> 304924880388f03b99c5289268bdd86d4d241b1f

@@ -1,6 +1,6 @@
 import { getProjects } from '@/lib/projects-db';
 
-export const revalidate = 0;
+export const dynamic = 'force-dynamic';
 
 export default async function ProjectsPage() {
   const projects = await getProjects();
