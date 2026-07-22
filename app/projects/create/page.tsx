@@ -1,7 +1,7 @@
 'use client';
 
 import { useActionState } from 'react';
-import { createProject, type State } from '@/app/lib/actions';
+import { createProject, type State } from '@/lib/actions';
 
 
 const initialState: State = {
@@ -120,7 +120,6 @@ export default function CreateProjectPage() {
 
 
 
-
         {/* TYPE */}
         <div>
 
@@ -226,6 +225,7 @@ export default function CreateProjectPage() {
 
 
 
+
         {/* YEAR COMPLETED */}
         <div>
 
@@ -291,6 +291,7 @@ export default function CreateProjectPage() {
 
 
 
+
         {/* LINK */}
         <div>
 
@@ -318,7 +319,6 @@ export default function CreateProjectPage() {
 
 
         </div>
-
 
 
 
