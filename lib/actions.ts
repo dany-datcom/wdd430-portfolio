@@ -6,126 +6,418 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 
+
+const currentYear = new Date().getFullYear();
+
+
+
 const ProjectFormSchema = z.object({
-  title: z.string().min(2, 'Title must be at least 2 characters'),
-  description: z.string().min(10, 'Description must be at least 10 characters'),
-  type: z.enum(['school', 'personal', 'opensource'], {
-    errorMap: () => ({ message: 'Type must be school, personal, or opensource' }),
-  }),
-  technologies: z.string().min(2, 'Add at least one technology'),
-  link: z.string().url('Invalid URL').optional().or(z.literal('')),
+
+  title: z
+    .string()
+    .min(3, 'Title must be at least 3 characters.'),
+
+
+  description: z
+    .string()
+    .min(20, 'Description must be at least 20 characters.'),
+
+
+  type: z.enum(
+    ['school', 'personal', 'opensource'],
+    {
+      errorMap: () => ({
+        message:
+        'Type must be school, personal, or opensource'
+      })
+    }
+  ),
+
+
+  technologies: z
+    .string()
+    .min(2, 'Add at least one technology.'),
+
+
+  yearCompleted: z.coerce
+    .number()
+    .int('Year must be a whole number.')
+    .gte(
+      2000,
+      'Year must be 2000 or later.'
+    )
+    .lte(
+      currentYear,
+      `Year cannot be greater than ${currentYear}.`
+    ),
+
+
+  link: z
+    .string()
+    .url('Invalid URL')
+    .optional()
+    .or(z.literal(''))
+
 });
 
-export async function createProject(formData: FormData) {
- 
-  const raw = {
-    title: formData.get('title'),
-    description: formData.get('description'),
-    type: formData.get('type'),
-    technologies: formData.get('technologies'),
-    link: formData.get('link'),
+
+
+
+
+export type State = {
+
+  errors?: {
+
+    title?: string[];
+
+    description?: string[];
+
+    type?: string[];
+
+    technologies?: string[];
+
+    yearCompleted?: string[];
+
+    link?: string[];
+
   };
 
-  
-  const parsed = ProjectFormSchema.safeParse(raw);
 
-  if (!parsed.success) {
-   
-    const errors = parsed.error.flatten().fieldErrors;
-    throw new Error(`Validation failed: ${JSON.stringify(errors)}`);
+  message?: string | null;
+
+};
+
+
+
+
+
+
+
+export async function createProject(
+  prevState: State,
+  formData: FormData
+): Promise<State | void> {
+
+  const validatedFields =
+  ProjectFormSchema.safeParse({
+
+    title:
+    formData.get('title'),
+
+
+    description:
+    formData.get('description'),
+
+
+    type:
+    formData.get('type'),
+
+
+    technologies:
+    formData.get('technologies'),
+
+
+    yearCompleted:
+    formData.get('yearCompleted'),
+
+
+    link:
+    formData.get('link'),
+
+  });
+
+
+
+
+
+  if (!validatedFields.success) {
+
+
+    return {
+
+      errors:
+      validatedFields.error.flatten().fieldErrors,
+
+
+      message:
+      'Missing or invalid fields. Failed to create project.'
+
+    };
+
   }
 
-  
-  const { title, description, type, technologies, link } = parsed.data;
 
- 
-  const techArray = technologies
+
+
+
+  const {
+    title,
+    description,
+    type,
+    technologies,
+    yearCompleted,
+    link
+
+  } = validatedFields.data;
+
+
+
+
+
+
+  const techArray =
+  technologies
     .split(',')
-    .map((tech) => tech.trim())
-    .filter((tech) => tech.length > 0);
+    .map((tech)=>tech.trim())
+    .filter(
+      (tech)=>tech.length > 0
+    );
 
-  
-  await sql`
-    INSERT INTO projects (title, description, type, technologies, link)
-    VALUES (${title}, ${description}, ${type}, ${JSON.stringify(techArray)}, ${link || null})
-  `;
 
-  
+
+
+
+
+  try {
+
+
+    await sql`
+
+      INSERT INTO projects 
+      (
+        title,
+        description,
+        type,
+        technologies,
+        year_completed,
+        link
+      )
+
+      VALUES
+      (
+        ${title},
+        ${description},
+        ${type},
+        ${techArray},
+        ${yearCompleted},
+        ${link || null}
+      )
+
+    `;
+
+
+
+  } catch(error) {
+
+
+    return {
+
+      message:
+      'Database Error: Failed to create project.'
+
+    };
+
+
+  }
+
+
+
+
+
   revalidatePath('/projects');
+
   redirect('/projects');
+
 }
 
 
-export async function getProjectById(id: string) {
-  const data = await sql`
-    SELECT id, title, description, type, technologies, link
+
+
+
+
+
+
+
+export async function getProjectById(id:number) {
+
+
+  const data =
+  await sql`
+
+    SELECT 
+      id,
+      title,
+      description,
+      type,
+      technologies,
+      year_completed,
+      link
+
     FROM projects
+
     WHERE id = ${id}
+
   `;
 
-  
-  if (data.rows.length === 0) {
+
+
+  if(data.rows.length === 0){
+
     return null;
+
   }
+
 
   return data.rows[0];
+
 }
 
 
+export async function updateProject(
+id:string,
+formData:FormData
+){
 
-export async function updateProject(id: string, formData: FormData) {
-  
-  const raw = {
-    title: formData.get('title'),
-    description: formData.get('description'),
-    type: formData.get('type'),
-    technologies: formData.get('technologies'),
-    link: formData.get('link'),
-  };
 
- 
-  const parsed = ProjectFormSchema.safeParse(raw);
+  const validatedFields =
+  ProjectFormSchema.safeParse({
 
-  if (!parsed.success) {
-    const errors = parsed.error.flatten().fieldErrors;
-    throw new Error(`Validation failed: ${JSON.stringify(errors)}`);
+    title:
+    formData.get('title'),
+
+
+    description:
+    formData.get('description'),
+
+
+    type:
+    formData.get('type'),
+
+
+    technologies:
+    formData.get('technologies'),
+
+
+    yearCompleted:
+    formData.get('yearCompleted'),
+
+
+    link:
+    formData.get('link'),
+
+  });
+
+
+
+
+  if(!validatedFields.success){
+
+    throw new Error(
+      "Validation failed"
+    );
+
   }
 
-  
-  const { title, description, type, technologies, link } = parsed.data;
 
-  
-  const techArray = technologies
+
+
+  const {
+    title,
+    description,
+    type,
+    technologies,
+    yearCompleted,
+    link
+
+  } = validatedFields.data;
+
+
+
+
+  const techArray =
+  technologies
     .split(',')
-    .map((tech) => tech.trim())
-    .filter((tech) => tech.length > 0);
+    .map(
+      tech=>tech.trim()
+    );
 
- 
+
+
+
   await sql`
+
     UPDATE projects
-    SET 
-      title = ${title},
-      description = ${description},
-      type = ${type},
-      technologies = ${JSON.stringify(techArray)},
-      link = ${link || null}
-    WHERE id = ${id}
+
+    SET
+
+      title=${title},
+
+      description=${description},
+
+      type=${type},
+
+      technologies=${techArray},
+
+      year_completed=${yearCompleted},
+
+      link=${link || null}
+
+
+    WHERE id=${id}
+
   `;
 
-  
+
+
+
   revalidatePath('/projects');
+
   redirect('/projects');
+
+
 }
 
 
-export async function deleteProject(id: string) {
-  
-  await sql`
-    DELETE FROM projects
-    WHERE id = ${id}
-  `;
 
- 
+
+
+
+
+
+export async function deleteProject(id:string){
+
+
+  try{
+
+
+    await sql`
+
+      DELETE FROM projects
+
+      WHERE id=${id}
+
+    `;
+
+
+
+  }catch(error){
+
+
+    console.error(
+      "Delete error:",
+      error
+    );
+
+
+    throw new Error(
+      "Failed to delete project"
+    );
+
+
+  }
+
+
+
   revalidatePath('/projects');
-  
+
 }
